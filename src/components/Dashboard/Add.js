@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 
-const Add = ({ employees, setEmployees, setIsAdding }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [salary, setSalary] = useState('');
-  const [date, setDate] = useState('');
+const Add = ({ communities, setCommunities, setIsAdding }) => {
+  const [communityName, setCommunityName] = useState('');
+  const [number, setNumber] = useState('');
+  const [meaning, setMeaning] = useState('');
+  const [memberNum, setMemberNum] = useState('');
+  const [Birthdate, setBirthdate] = useState('');
 
   const handleAdd = e => {
     e.preventDefault();
 
-    if (!firstName || !lastName || !email || !salary || !date) {
+    // 필드 유효성 검사
+    if (!communityName || !number || !meaning || !memberNum || !Birthdate) {
       return Swal.fire({
         icon: 'error',
         title: 'Error!',
@@ -20,25 +21,25 @@ const Add = ({ employees, setEmployees, setIsAdding }) => {
       });
     }
 
-    const id = employees.length + 1;
-    const newEmployee = {
+    const id = communities.length + 1;
+    const newCommunity = {
       id,
-      firstName,
-      lastName,
-      email,
-      salary,
-      date,
+      communityName,
+      number,
+      meaning,
+      memberNum,
+      Birthdate,
     };
 
-    employees.push(newEmployee);
-    localStorage.setItem('employees_data', JSON.stringify(employees));
-    setEmployees(employees);
+    communities.push(newCommunity);
+    localStorage.setItem('communities_data', JSON.stringify(communities));
+    setCommunities(communities);
     setIsAdding(false);
 
     Swal.fire({
       icon: 'success',
       title: 'Added!',
-      text: `${firstName} ${lastName}'s data has been Added.`,
+      text: `${communityName} has been added.`,
       showConfirmButton: false,
       timer: 1500,
     });
@@ -47,46 +48,41 @@ const Add = ({ employees, setEmployees, setIsAdding }) => {
   return (
     <div className="small-container">
       <form onSubmit={handleAdd}>
-        <h1>Add Employee</h1>
-        <label htmlFor="firstName">First Name</label>
+        <h1>Add Community</h1>
+        <label htmlFor="communityName">Community Name</label>
         <input
-          id="firstName"
+          id="communityName"
           type="text"
-          name="firstName"
-          value={firstName}
-          onChange={e => setFirstName(e.target.value)}
+          value={communityName}
+          onChange={e => setCommunityName(e.target.value)}
         />
-        <label htmlFor="lastName">Last Name</label>
+        <label htmlFor="number">Number</label>
         <input
-          id="lastName"
+          id="number"
           type="text"
-          name="lastName"
-          value={lastName}
-          onChange={e => setLastName(e.target.value)}
+          value={number}
+          onChange={e => setNumber(e.target.value)}
         />
-        <label htmlFor="email">Email</label>
+        <label htmlFor="meaning">Meaning</label>
         <input
-          id="email"
-          type="email"
-          name="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          id="meaning"
+          type="text"
+          value={meaning}
+          onChange={e => setMeaning(e.target.value)}
         />
-        <label htmlFor="salary">Salary ($)</label>
+        <label htmlFor="memberNum">Number of Members</label>
         <input
-          id="salary"
+          id="memberNum"
           type="number"
-          name="salary"
-          value={salary}
-          onChange={e => setSalary(e.target.value)}
+          value={memberNum}
+          onChange={e => setMemberNum(e.target.value)}
         />
-        <label htmlFor="date">Date</label>
+        <label htmlFor="Birthdate">Birthdate</label>
         <input
-          id="date"
+          id="Birthdate"
           type="date"
-          name="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
+          value={Birthdate}
+          onChange={e => setBirthdate(e.target.value)}
         />
         <div style={{ marginTop: '30px' }}>
           <input type="submit" value="Add" />

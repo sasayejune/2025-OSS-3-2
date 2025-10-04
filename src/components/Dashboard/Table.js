@@ -1,14 +1,9 @@
 import React from 'react';
 
-const Table = ({ employees, handleEdit, handleDelete }) => {
-  employees.forEach((employee, i) => {
-    employee.id = i + 1;
-  });
-
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: null,
+const Table = ({ communities, handleEdit, handleDelete }) => {
+  // ID 설정 (선택적으로 사용)
+  communities.forEach((community, i) => {
+    community.id = i + 1;
   });
 
   return (
@@ -17,38 +12,38 @@ const Table = ({ employees, handleEdit, handleDelete }) => {
         <thead>
           <tr>
             <th>No.</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Salary</th>
-            <th>Date</th>
+            <th>Community Name</th>
+            <th>Number</th>
+            <th>Meaning</th>
+            <th>Number of Members</th>
+            <th>Birthdate</th>
             <th colSpan={2} className="text-center">
               Actions
             </th>
           </tr>
         </thead>
         <tbody>
-          {employees.length > 0 ? (
-            employees.map((employee, i) => (
-              <tr key={employee.id}>
+          {communities.length > 0 ? (
+            communities.map((community, i) => (
+              <tr key={community.id}>
                 <td>{i + 1}</td>
-                <td>{employee.firstName}</td>
-                <td>{employee.lastName}</td>
-                <td>{employee.email}</td>
-                <td>{formatter.format(employee.salary)}</td>
-                <td>{employee.date} </td>
+                <td>{community.communityName}</td>
+                <td>{community.number}</td>
+                <td>{community.meaning}</td>
+                <td>{community.memberNum}</td>
+                <td>{community.Birthdate}</td>
                 <td className="text-right">
                   <button
-                    onClick={() => handleEdit(employee.id)}
-                    className="button muted-button"
+                    onClick={() => handleEdit(community.id)}
+                    className="button edit-button"
                   >
                     Edit
                   </button>
                 </td>
                 <td className="text-left">
                   <button
-                    onClick={() => handleDelete(employee.id)}
-                    className="button muted-button"
+                    onClick={() => handleDelete(community.id)}
+                    className="button delete-button"
                   >
                     Delete
                   </button>
@@ -57,7 +52,7 @@ const Table = ({ employees, handleEdit, handleDelete }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={7}>No Employees</td>
+              <td colSpan={7}>No Communities</td>
             </tr>
           )}
         </tbody>

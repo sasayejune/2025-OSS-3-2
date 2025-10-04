@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-
 import Header from './Header';
 import Table from './Table';
 import Add from './Add';
 import Edit from './Edit';
-
-import { employeesData } from '../../data';
+import { communitiesData } from '../../data';
 
 const Dashboard = ({ setIsAuthenticated }) => {
-  const [employees, setEmployees] = useState(employeesData);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [communities, setCommunities] = useState(communitiesData);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('employees_data'));
-    if (data !== null && Object.keys(data).length !== 0) setEmployees(data);
+    const data = JSON.parse(localStorage.getItem('communities_data'));
+    if (data !== null && Object.keys(data).length !== 0) setCommunities(data);
   }, []);
 
   const handleEdit = id => {
-    const [employee] = employees.filter(employee => employee.id === id);
-
-    setSelectedEmployee(employee);
+    const [community] = communities.filter(community => community.id === id);
+    setSelectedCommunity(community);
     setIsEditing(true);
   };
 
@@ -36,19 +33,39 @@ const Dashboard = ({ setIsAuthenticated }) => {
       cancelButtonText: 'No, cancel!',
     }).then(result => {
       if (result.value) {
-        const [employee] = employees.filter(employee => employee.id === id);
-
+        const updatedCommunities = communities.filter(community => community.id !== id);
+        localStorage.setItem('communities_data', JSON.stringify(updatedCommunities));
+        setCommunities(updatedCommunities);
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',
-          text: `${employee.firstName} ${employee.lastName}'s data has been deleted.`,
+          text: 'The community has been deleted.',
           showConfirmButton: false,
           timer: 1500,
         });
+      }
+    });
+  };
 
-        const employeesCopy = employees.filter(employee => employee.id !== id);
-        localStorage.setItem('employees_data', JSON.stringify(employeesCopy));
-        setEmployees(employeesCopy);
+  const handleDeleteAll = () => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete all!',
+      cancelButtonText: 'No, cancel!',
+    }).then(result => {
+      if (result.value) {
+        localStorage.removeItem('communities_data');
+        setCommunities([]);
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'All communities have been deleted.',
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     });
   };
@@ -60,9 +77,10 @@ const Dashboard = ({ setIsAuthenticated }) => {
           <Header
             setIsAdding={setIsAdding}
             setIsAuthenticated={setIsAuthenticated}
+            handleDeleteAll={handleDeleteAll} 
           />
           <Table
-            employees={employees}
+            communities={communities}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
           />
@@ -70,16 +88,16 @@ const Dashboard = ({ setIsAuthenticated }) => {
       )}
       {isAdding && (
         <Add
-          employees={employees}
-          setEmployees={setEmployees}
+          communities={communities}
+          setCommunities={setCommunities}
           setIsAdding={setIsAdding}
         />
       )}
       {isEditing && (
         <Edit
-          employees={employees}
-          selectedEmployee={selectedEmployee}
-          setEmployees={setEmployees}
+          communities={communities}
+          selectedCommunity={selectedCommunity}
+          setCommunities={setCommunities}
           setIsEditing={setIsEditing}
         />
       )}
@@ -87,4 +105,4 @@ const Dashboard = ({ setIsAuthenticated }) => {
   );
 };
 
-export default Dashboard;
+export default Dashboard; 
